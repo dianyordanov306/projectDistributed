@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net9.0</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="System.ServiceModel.Primitives" Version="8.1.2" />
+		<PackageReference Include="System.ServiceModel.Http" Version="8.1.2" />
+		<PackageReference Include="CoreWCF.RabbitMQ.Client" Version="1.*" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\RideSharing.Contracts\RideSharing.Contracts.csproj" />
+	</ItemGroup>
+</Project>

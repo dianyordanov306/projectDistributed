@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="RideSharing.Contracts/RideSharing.Contracts.csproj" />
+    <Project Path="RideSharing.Data/RideSharing.Data.csproj" />
+    <Project Path="RideSharing.Repositories/RideSharing.Repositories.csproj" />
+  </Folder>
+  <Folder Name="/Presentations/">
+    <Project Path="RideSharing.Client/RideSharing.Client.csproj" />
+    <Project Path="RideSharing.WebServices/RideSharing.WebServices.csproj" />
+  </Folder>
+</Solution>
