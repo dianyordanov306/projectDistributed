@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Repository/StudySprint.Repository.csproj" />
+  <Project Path="Services/StudySprint.Services.csproj" />
+  <Project Path="StudySprint.Data/StudySprint.Data.csproj" />
+  <Project Path="StudySprint/StudySprint.API.csproj" />
+</Solution>
