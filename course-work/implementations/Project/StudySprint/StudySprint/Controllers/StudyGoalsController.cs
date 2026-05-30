@@ -16,9 +16,11 @@ namespace StudySprint.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? sortBy = null)
         {
-            return Ok(await _service.GetAll());
+            var result = await _service.GetAll(page, pageSize, sortBy);
+
+            return Ok(result);
         }
 
         [HttpPost]
@@ -53,6 +55,14 @@ namespace StudySprint.API.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var result = await _service.Delete(id);
+
+            return Ok(result);
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult> Search([FromQuery] string? title, [FromQuery] bool? completed)
+        {
+            var result = await _service.Search(title, completed);
 
             return Ok(result);
         }

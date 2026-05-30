@@ -41,21 +41,32 @@ namespace StudySprint.Services
             return dto;
         }
 
-        public async Task<IEnumerable<GetStudySessionDto>> GetAll()
+        public async Task<IEnumerable<GetStudySessionDto>> GetAll(int page, int pageSize, string? sortBy)
         {
             var sessions = await _repository.GetAll();
 
-            return sessions.Select(x =>
-                    new GetStudySessionDto
-                    {
-                        Id = x.Id,
-                        Title = x.Title,
-                        Subject = x.Subject,
-                        DurationMinutes = x.DurationMinutes,
-                        SessionDate = x.SessionDate,
-                        Difficulty = x.Difficulty,
-                        UserId = x.UserId
-                    });
+            sessions = sortBy?.ToLower() switch
+            {
+                "title" => sessions.OrderBy(x => x.Title),
+                "difficulty" => sessions.OrderBy(x => x.Difficulty),
+                "duration" => sessions.OrderBy(x => x.DurationMinutes),
+                _ => sessions.OrderBy(x => x.Id)
+            };
+
+            sessions = sessions
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize);
+
+            return sessions.Select(x => new GetStudySessionDto
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Subject = x.Subject,
+                DurationMinutes = x.DurationMinutes,
+                SessionDate = x.SessionDate,
+                Difficulty = x.Difficulty,
+                UserId = x.UserId
+            });
         }
 
         public async Task<GetStudySessionDto?> GetById(int id)
@@ -96,6 +107,32 @@ namespace StudySprint.Services
         public async Task<bool> Delete(int id)
         {
             return await _repository.DeleteById(id);
+        }
+
+        public async Task<IEnumerable<GetStudySessionDto>> Search(string? subject, int? difficulty)
+        {
+            var sessions = await _repository.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(subject))
+            {
+                sessions = sessions.Where(x => x.Subject.ToLower().Contains(subject.ToLower()));
+            }
+
+            if (difficulty.HasValue)
+            {
+                sessions = sessions.Where(x => x.Difficulty == difficulty.Value);
+            }
+
+            return sessions.Select(x => new GetStudySessionDto
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Subject = x.Subject,
+                DurationMinutes = x.DurationMinutes,
+                SessionDate = x.SessionDate,
+                Difficulty = x.Difficulty,
+                UserId = x.UserId
+            });
         }
     }
 }

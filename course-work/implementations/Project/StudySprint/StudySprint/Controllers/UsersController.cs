@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudySprint.Services.DTOs;
 using StudySprint.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StudySprint.API.Controllers
 {
     [ApiController]
     [Route("api/users")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -16,9 +18,9 @@ namespace StudySprint.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? sortBy = null)
         {
-            var result =  await _userService.GetAll();
+            var result = await _userService.GetAll(page, pageSize, sortBy);
 
             return Ok(result);
         }
@@ -57,6 +59,14 @@ namespace StudySprint.API.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var result = await _userService.Delete(id);
+
+            return Ok(result);
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult> Search([FromQuery] string? username, [FromQuery] string? role)
+        {
+            var result = await _userService.Search(username, role);
 
             return Ok(result);
         }

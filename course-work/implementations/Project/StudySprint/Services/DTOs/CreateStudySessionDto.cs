@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StudySprint.Services.DTOs
 {
@@ -15,11 +12,13 @@ namespace StudySprint.Services.DTOs
         [MaxLength(50)]
         public required string Subject { get; set; }
 
+        [Range(1, 1000)]
         public int DurationMinutes { get; set; }
 
         public DateTime SessionDate { get; set; }
 
-        public double Difficulty { get; set; }
+        [Range(1, 5)]
+        public int Difficulty { get; set; }
 
         public int UserId { get; set; }
     }

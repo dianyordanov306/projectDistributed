@@ -10,8 +10,7 @@ namespace StudySprint.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRepository<User>
-            _repository;
+        private readonly IRepository<User> _repository;
 
         public UserService(
             IRepository<User> repository)
@@ -42,22 +41,29 @@ namespace StudySprint.Services
             return dto;
         }
 
-        public async Task<IEnumerable<GetUserDto>> GetAll()
+        public async Task<IEnumerable<GetUserDto>> GetAll(int page, int pageSize, string? sortBy)
         {
             var users = await _repository.GetAll();
 
-            return users .Select(x =>
-                new GetUserDto{
-                        Id =x.Id,
+            users = sortBy?.ToLower() switch
+            {
+                "username" => users.OrderBy(x => x.Username),
+                "age" => users.OrderBy(x => x.Age),
+                _ => users.OrderBy(x => x.Id)
+            };
 
-                        Username = x.Username,
+            users = users
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize);
 
-                        Email = x.Email,
-
-                        Role = x.Role,
-
-                        Age = x.Age
-                    });
+            return users.Select(x => new GetUserDto
+            {
+                Id = x.Id,
+                Username = x.Username,
+                Email = x.Email,
+                Role = x.Role,
+                Age = x.Age
+            });
         }
 
         public async Task<GetUserDto?> GetById(int id)
@@ -102,6 +108,30 @@ namespace StudySprint.Services
         public async Task<bool> Delete(int id)
         {
             return await _repository.DeleteById(id);
+        }
+
+        public async Task<IEnumerable<GetUserDto>> Search(string? username, string? role)
+        {
+            var users = await _repository.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(username))
+            {
+                users = users.Where(x => x.Username.ToLower().Contains(username.ToLower()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(role))
+            {
+                users = users.Where(x => x.Role.ToLower().Contains(role.ToLower()));
+            }
+
+            return users.Select(x => new GetUserDto
+            {
+                Id = x.Id,
+                Username = x.Username,
+                Email = x.Email,
+                Role = x.Role,
+                Age = x.Age
+            });
         }
     }
 }

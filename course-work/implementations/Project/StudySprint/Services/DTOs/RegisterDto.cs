@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudySprint.Services.DTOs
 {
-    public class CreateUserDto
+    public class RegisterDto
     {
         [Required]
         [MaxLength(50)]
@@ -10,16 +13,13 @@ namespace StudySprint.Services.DTOs
 
         [Required]
         [EmailAddress]
-        [MaxLength(100)]
         public required string Email { get; set; }
 
         [Required]
         [MinLength(6)]
-        [MaxLength(100)]
         public required string Password { get; set; }
 
         [Required]
-        [MaxLength(30)]
         public required string Role { get; set; }
 
         [Range(1, 120)]

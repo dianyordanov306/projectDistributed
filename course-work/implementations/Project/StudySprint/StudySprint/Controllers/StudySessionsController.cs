@@ -15,13 +15,16 @@ namespace StudySprint.API.Controllers
                 _service = service;
             }
 
-            [HttpGet]
-            public async Task<ActionResult> Get()
-            {
-                return Ok(await _service.GetAll());
-            }
 
-            [HttpPost]
+        [HttpGet]
+        public async Task<ActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? sortBy = null)
+        {
+            var result = await _service.GetAll(page, pageSize, sortBy);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
             public async Task<ActionResult> Create(CreateStudySessionDto dto)
             {
                 return Ok(await _service.Create(dto));
@@ -56,5 +59,13 @@ namespace StudySprint.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult> Search([FromQuery] string? subject, [FromQuery] int? difficulty)
+        {
+            var result = await _service.Search(subject, difficulty);
+
+            return Ok(result);
+        }
     }
-    }
+}

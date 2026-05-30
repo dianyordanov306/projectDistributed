@@ -7,7 +7,7 @@ namespace StudySprint.Services.Interfaces
 {
     public interface IStudySessionService
     {
-        Task<IEnumerable<GetStudySessionDto>> GetAll();
+        Task<IEnumerable<GetStudySessionDto>> GetAll(int page, int pageSize, string? sortBy);
 
         Task<GetStudySessionDto?> GetById(int id);
 
@@ -16,5 +16,7 @@ namespace StudySprint.Services.Interfaces
         Task<bool> Update(int id, CreateStudySessionDto dto);
 
         Task<bool> Delete(int id);
+
+        Task<IEnumerable<GetStudySessionDto>> Search(string? subject, int? difficulty);
     }
 }

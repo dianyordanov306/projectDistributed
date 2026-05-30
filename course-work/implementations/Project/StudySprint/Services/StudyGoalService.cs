@@ -34,9 +34,21 @@ namespace StudySprint.Services
             return dto;
         }
 
-        public async Task<IEnumerable<GetStudyGoalDto>> GetAll()
+        public async Task<IEnumerable<GetStudyGoalDto>> GetAll(int page, int pageSize, string? sortBy)
         {
             var goals = await _repository.GetAll();
+
+            goals = sortBy?.ToLower() switch
+            {
+                "title" => goals.OrderBy(x => x.GoalTitle),
+                "priority" => goals.OrderBy(x => x.Priority),
+                "deadline" => goals.OrderBy(x => x.Deadline),
+                _ => goals.OrderBy(x => x.Id)
+            };
+
+            goals = goals
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize);
 
             return goals.Select(x => new GetStudyGoalDto
             {
@@ -46,7 +58,7 @@ namespace StudySprint.Services
                 Deadline = x.Deadline,
                 Completed = x.Completed,
                 Priority = x.Priority,
-                 UserId = x.UserId
+                UserId = x.UserId
             });
         }
         public async Task<GetStudyGoalDto?> GetById(int id)
@@ -87,6 +99,32 @@ namespace StudySprint.Services
         public async Task<bool> Delete(int id)
         {
             return await _repository.DeleteById(id);
+        }
+
+        public async Task<IEnumerable<GetStudyGoalDto>> Search(string? title, bool? completed)
+        {
+            var goals = await _repository.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                goals = goals.Where(x => x.GoalTitle.ToLower().Contains(title.ToLower()));
+            }
+
+            if (completed.HasValue)
+            {
+                goals = goals.Where(x => x.Completed == completed.Value);
+            }
+
+            return goals.Select(x => new GetStudyGoalDto
+            {
+                Id = x.Id,
+                GoalTitle = x.GoalTitle,
+                TargetHours = x.TargetHours,
+                Deadline = x.Deadline,
+                Completed = x.Completed,
+                Priority = x.Priority,
+                UserId = x.UserId
+            });
         }
     }
 }

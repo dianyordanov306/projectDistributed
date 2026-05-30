@@ -4,7 +4,7 @@ namespace StudySprint.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<IEnumerable<GetUserDto>> GetAll();
+        Task<IEnumerable<GetUserDto>> GetAll(int page, int pageSize, string? sortBy);
 
         Task<GetUserDto?> GetById(int id);
 
@@ -13,6 +13,8 @@ namespace StudySprint.Services.Interfaces
         Task<bool> Update(int id, UpdateUserDto dto);
 
         Task<bool> Delete(int id);
-        
+
+        Task<IEnumerable<GetUserDto>> Search(string? username, string? role);
+
     }
 }

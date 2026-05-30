@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StudySprint.Services.DTOs
 {
@@ -12,10 +9,12 @@ namespace StudySprint.Services.DTOs
         public required string Username { get; set; }
 
         [Required]
+        [EmailAddress]
         [MaxLength(100)]
         public required string Email { get; set; }
 
         [Required]
+        [MinLength(6)]
         [MaxLength(100)]
         public required string Password { get; set; }
 
@@ -23,6 +22,7 @@ namespace StudySprint.Services.DTOs
         [MaxLength(30)]
         public required string Role { get; set; }
 
+        [Range(1, 120)]
         public int Age { get; set; }
     }
 }
